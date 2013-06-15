@@ -1,12 +1,9 @@
 package be.dennisdegryse.rfcommsms.client;
 
+import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
-
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import android.content.Intent;
 
 /**
  * 
@@ -14,17 +11,20 @@ import java.util.Set;
  */
 public class ConnectionManager {
 	private static ConnectionManager instance = null;
-	private volatile Object lock = new Object();
-	private final Map<Connection, Thread> clientConnectionThreads = new HashMap<Connection, Thread>();
+	
 	private final Connection.Observer cleanupObserver = new Connection.Observer() {
 		@Override
 		public final void onClosed(Connection connection) {
-			synchronized (lock) {
-				clientConnectionThreads.remove(connection);
-			}
+			final Context context = connection.getContext();
+
+			closeConnection();
+			
+			if (BluetoothAdapter.getDefaultAdapter().isEnabled())
+				waitForConnection(context);
 		}
 	};
-
+	private Connection connection = null;
+	
 	public final static ConnectionManager getInstance() {
 		if (instance == null)
 			instance = new ConnectionManager();
@@ -32,26 +32,24 @@ public class ConnectionManager {
 		return instance;
 	}
 
-	public final Set<Connection> connections() {
-		synchronized (lock) {
-			return new HashSet<Connection>(clientConnectionThreads.keySet());
-		}
-	}
-
-	public final void registerConnection(Context context, BluetoothSocket clientSocket) {
-		final Connection connection = new Connection(context, clientSocket, cleanupObserver);
-		final Thread connectionThread = new Thread(connection);
-
-		synchronized (lock) {
-			this.clientConnectionThreads.put(connection, connectionThread);
-			connectionThread.start();
-		}
+	private synchronized void closeConnection() {
+		connection = null;
 	}
 	
-	public final void closeAll() {
-		synchronized (lock) {
-			for (Connection connection : clientConnectionThreads.keySet())
-				connection.close();
-		}
+	protected final synchronized void registerConnection(Context context, BluetoothSocket clientSocket) {
+		this.connection = new Connection(context, clientSocket, cleanupObserver);
+		new Thread(connection).start();
+	}
+	
+	public final synchronized boolean isConnected() {
+		return connection != null;
+	}
+	
+	public final synchronized Connection getConnection() {
+		return connection;
+	}
+
+	public final void waitForConnection(final Context context) {
+		context.startService(new Intent(context, ConnectionListenerService.class));
 	}
 }

@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import be.dennisdegryse.rfcommsms.client.Connection;
 import be.dennisdegryse.rfcommsms.client.ConnectionManager;
 import be.dennisdegryse.rfcommsms.sms.Sms;
 import be.dennisdegryse.rfcommsms.sms.SmsHelper;
@@ -17,9 +16,10 @@ import be.dennisdegryse.rfcommsms.sms.SmsHelper;
 public class SmsReceiver extends BroadcastReceiver {
 	private void sendAsUnsolicitedResponse(Sms sms) {
 		final String response = "+CMT: \"" + sms.getAddress() + "\",,\"" + sms.serviceCenterTimeStamp() + "\"\r\n" + sms.getBody() + "\r\n";
-
-		for (Connection connection : ConnectionManager.getInstance().connections())
-			connection.write(response);
+		final ConnectionManager connectionManager = ConnectionManager.getInstance();
+		
+		if (connectionManager.isConnected())
+			connectionManager.getConnection().write(response);
 	}
 
 	@Override

@@ -16,9 +16,8 @@
         android:icon="@drawable/ic_launcher"
         android:allowBackup="true">
         
-
-        <service android:name="be.dennisdegryse.rfcommsms.client.ListenerService" android:enabled="true" />
-
+        <service android:name="be.dennisdegryse.rfcommsms.client.ConnectionListenerService" android:enabled="true" />
+        
         <receiver android:name="be.dennisdegryse.rfcommsms.receiver.BluetoothReceiver" android:enabled="true">
             <intent-filter>
                 <action android:name="android.bluetooth.adapter.action.STATE_CHANGED" />
