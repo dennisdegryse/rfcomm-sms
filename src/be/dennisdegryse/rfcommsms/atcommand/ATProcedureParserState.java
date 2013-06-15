@@ -1,7 +1,5 @@
 package be.dennisdegryse.rfcommsms.atcommand;
 
-import java.io.IOException;
-
 /**
  * 
  * @author	Dennis Degryse <dennisdegryse@gmail.com>
@@ -12,7 +10,7 @@ public class ATProcedureParserState extends ProcedureParserState {
 	}
 
 	@Override
-	protected final void parseChar(char chr) throws IOException {
+	protected final void parseChar(char chr) {
 		switch (chr) {
 		case LINE_FEED:
 		case SPACE:
@@ -28,7 +26,7 @@ public class ATProcedureParserState extends ProcedureParserState {
 	}
 
 	@Override
-	protected final void runProcedure() throws IOException {
+	protected final void runProcedure() {
 		sendOk();
 	}
 }

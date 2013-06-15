@@ -3,8 +3,6 @@ package be.dennisdegryse.rfcommsms.atcommand;
 import android.content.Context;
 import be.dennisdegryse.rfcommsms.client.Connection;
 
-import java.io.IOException;
-
 /**
  * 
  * @author	Dennis Degryse <dennisdegryse@gmail.com>
@@ -21,7 +19,7 @@ public class Parser {
 		return clientConnection.getContext();
 	}
 
-	public final void parse(byte[] buffer, int size) throws IOException {
+	public final void parse(byte[] buffer, int size) {
 		int offset = 0;
 
 		do
@@ -29,7 +27,7 @@ public class Parser {
 		while (offset < size);
 	}
 
-	protected final void sendResponse(String response) throws IOException {
+	protected final void sendResponse(String response) {
 		clientConnection.write(response);
 	}
 

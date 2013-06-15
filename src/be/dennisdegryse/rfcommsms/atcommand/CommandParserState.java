@@ -1,7 +1,5 @@
 package be.dennisdegryse.rfcommsms.atcommand;
 
-import java.io.IOException;
-
 /**
  * 
  * @author	Dennis Degryse <dennisdegryse@gmail.com>
@@ -35,7 +33,7 @@ public abstract class CommandParserState extends ParserState {
 	}
 
 	@Override
-	protected final void parseChar(char chr) throws IOException {
+	protected final void parseChar(char chr) {
 		if (this.canEvolveToHelp) {
 			switch (chr) {
 			case SPACE:
@@ -68,7 +66,7 @@ public abstract class CommandParserState extends ParserState {
 		}
 	}
 
-	protected final void receiveNumericArgument(int value, boolean last) throws IOException {
+	protected final void receiveNumericArgument(int value, boolean last) {
 		try {
 			validateNumericArgument(allocateArgumentIndex(last), value);
 			
@@ -82,7 +80,7 @@ public abstract class CommandParserState extends ParserState {
 		}
 	}
 
-	protected final void receiveStringArgument(String value, boolean last) throws IOException {
+	protected final void receiveStringArgument(String value, boolean last) {
 		try {
 			validateStringArgument(allocateArgumentIndex(last), value);
 			
@@ -96,20 +94,20 @@ public abstract class CommandParserState extends ParserState {
 		}
 	}
 
-	protected void validateData(String data) throws IOException {
+	protected void validateData(String data) {
 	}
 
-	protected void validateEmptyArgument(int index) throws IllegalArgumentException, IOException {
+	protected void validateEmptyArgument(int index) throws IllegalArgumentException {
 		throw new IllegalArgumentException();
 	}
 
-	protected void validateNumericArgument(int index, int value) throws IllegalArgumentException, IOException {
+	protected void validateNumericArgument(int index, int value) throws IllegalArgumentException {
 		throw new IllegalArgumentException();
 	}
 
-	protected void validateStringArgument(int index, String value) throws IllegalArgumentException, IOException {
+	protected void validateStringArgument(int index, String value) throws IllegalArgumentException {
 		throw new IllegalArgumentException();
 	}
 
-	protected abstract void execute() throws IOException;
+	protected abstract void execute();
 }

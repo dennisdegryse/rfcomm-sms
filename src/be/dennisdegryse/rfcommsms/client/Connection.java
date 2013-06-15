@@ -27,28 +27,34 @@ public class Connection implements Runnable {
 		this.parser = new Parser(this);
 	}
 
-	private int read(byte[] buffer, int timeout) throws IOException {
-		final InputStream inputStream = clientSocket.getInputStream();
-		final int maxTimeout = timeout / 50;
-		int elapsedTimeout = 0;
-
-		while (inputStream.available() == 0 && elapsedTimeout++ < maxTimeout)
-			try {
-				Thread.sleep(50);
-			} catch (InterruptedException e) {
-				// IGNORE
+	private int read(byte[] buffer, int timeout) {
+		try {
+			final InputStream inputStream = clientSocket.getInputStream();
+			final int maxTimeout = timeout / 50;
+			int elapsedTimeout = 0;
+	
+			while (inputStream.available() == 0 && elapsedTimeout++ < maxTimeout)
+				try {
+					Thread.sleep(50);
+				} catch (InterruptedException e) {
+					// IGNORE
+				}
+			
+			synchronized (this.lock) {
+				return inputStream.read(buffer);
 			}
-
-		synchronized (this.lock) {
-			return inputStream.read(buffer);
+		} catch (IOException e) {
+			close();
 		}
+		
+		return 0;
 	}
 
 	private void terminate() {
 		if (clientSocket != null)
 			try {
 				clientSocket.close();
-			} catch (IOException localIOException) {
+			} catch (IOException e) {
 				// IGNORE
 			}
 
@@ -66,23 +72,19 @@ public class Connection implements Runnable {
 	public final void run() {
 		final byte[] buffer = new byte[512];
 
-		try {
-			while (!stopRequested) {
-				int size = read(buffer, 500);
-				
-				if (size > 0)
-					synchronized (lock) {
-						this.parser.parse(buffer, size);
-					}
-			}
-		} catch (IOException e) {
-			// IGNORE
-		} finally {
-			terminate();
+		while (!stopRequested) {
+			int size = read(buffer, 500);
+			
+			if (size > 0)
+				synchronized (lock) {
+					this.parser.parse(buffer, size);
+				}
 		}
+
+		terminate();
 	}
 
-	public final void write(String paramString) throws IOException {
+	public final void write(String paramString) {
 		try {
 			write(paramString.getBytes("UTF-8"));
 		} catch (UnsupportedEncodingException e) {
@@ -90,14 +92,13 @@ public class Connection implements Runnable {
 		}
 	}
 
-	public final void write(byte[] paramArrayOfByte) throws IOException {
+	public final void write(byte[] paramArrayOfByte) {
 		try {
 			synchronized (this.lock) {
 				clientSocket.getOutputStream().write(paramArrayOfByte);
 			}
 		} catch (IOException e) {
 			close();
-			throw e;
 		}
 	}
 

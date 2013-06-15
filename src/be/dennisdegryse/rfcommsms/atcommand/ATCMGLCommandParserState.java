@@ -4,7 +4,6 @@ import be.dennisdegryse.rfcommsms.sms.Cursor;
 import be.dennisdegryse.rfcommsms.sms.Sms;
 import be.dennisdegryse.rfcommsms.sms.SmsHelper;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,7 +28,7 @@ public class ATCMGLCommandParserState extends CommandParserState {
 	}
 
 	@Override
-	protected final void execute() throws IOException {
+	protected final void execute() {
 		final String where = conditionMap.get(statusArgument);
 		final String orderBy = "date DESC";
 		final Cursor cursor = new SmsHelper(getParser().getContext()).query(where, orderBy);

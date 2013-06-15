@@ -1,7 +1,5 @@
 package be.dennisdegryse.rfcommsms.atcommand;
 
-import java.io.IOException;
-
 /**
  * 
  * @author	Dennis Degryse <dennisdegryse@gmail.com>
@@ -14,7 +12,7 @@ public class HelpParserState extends ParserState {
 		this.message = message;
 	}
 
-	private void sendHelpMessage() throws IOException {
+	private void sendHelpMessage() {
 		if (message != null)
 			getParser().sendResponse(message);
 
@@ -22,7 +20,7 @@ public class HelpParserState extends ParserState {
 	}
 
 	@Override
-	protected final void parseChar(char chr) throws IOException {
+	protected final void parseChar(char chr) {
 		switch (chr) {
 		case LINE_FEED:
 		case SPACE:

@@ -1,7 +1,5 @@
 package be.dennisdegryse.rfcommsms.atcommand;
 
-import java.io.IOException;
-
 /**
  * 
  * @author	Dennis Degryse <dennisdegryse@gmail.com>
@@ -18,14 +16,14 @@ public class StringArgumentParserState extends ParserState {
 		this.originatingCommandState = originatingCommandState;
 	}
 
-	private void returnStringArgument(boolean last) throws IOException {
+	private void returnStringArgument(boolean last) {
 		transition(originatingCommandState);
 
 		originatingCommandState.receiveStringArgument(argument.toString(), last);
 	}
 
 	@Override
-	protected final void parseChar(char chr) throws IOException {
+	protected final void parseChar(char chr) {
 		switch (chr) {
 		case QUOTE:
 			if (this.closedString)

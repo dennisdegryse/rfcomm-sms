@@ -3,8 +3,6 @@ package be.dennisdegryse.rfcommsms.atcommand;
 import be.dennisdegryse.rfcommsms.sms.Sms;
 import be.dennisdegryse.rfcommsms.sms.SmsHelper;
 
-import java.io.IOException;
-
 /**
  * 
  * @author	Dennis Degryse <dennisdegryse@gmail.com>
@@ -17,7 +15,7 @@ public class ATCMGDCommandParserState extends CommandParserState {
 	}
 
 	@Override
-	protected final void execute() throws IOException {
+	protected final void execute() {
 		final SmsHelper localSmsHelper = new SmsHelper(getParser().getContext());
 		final Sms localSms = localSmsHelper.find(this.indexArgument);
 

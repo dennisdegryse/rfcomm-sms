@@ -4,7 +4,6 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import be.dennisdegryse.rfcommsms.client.Connection;
 import be.dennisdegryse.rfcommsms.client.ConnectionManager;
 import be.dennisdegryse.rfcommsms.client.ListenerService;
 
@@ -13,11 +12,6 @@ import be.dennisdegryse.rfcommsms.client.ListenerService;
  * @author	Dennis Degryse <dennisdegryse@gmail.com>
  */
 public class BluetoothReceiver extends BroadcastReceiver {
-	private void closeConnections() {
-		for (Connection connection : ConnectionManager.getInstance().connections())
-			connection.close();
-	}
-
 	private void listenForConnections(Context context) {
 		context.startService(new Intent(context, ListenerService.class));
 	}
@@ -32,7 +26,7 @@ public class BluetoothReceiver extends BroadcastReceiver {
 			break;
 
 		case BluetoothAdapter.STATE_TURNING_OFF:
-			closeConnections();
+			ConnectionManager.getInstance().closeAll();
 			break;
 		}
 	}

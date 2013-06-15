@@ -1,7 +1,5 @@
 package be.dennisdegryse.rfcommsms.atcommand;
 
-import java.io.IOException;
-
 /**
  * 
  * @author	Dennis Degryse <dennisdegryse@gmail.com>
@@ -26,25 +24,25 @@ public abstract class ParserState {
 		return parser;
 	}
 
-	public final int parse(byte[] buffer, int offset, int size) throws IOException {
+	public final int parse(byte[] buffer, int offset, int size) {
 		while (!terminated && offset < size)
 			parseChar((char) buffer[offset++]);
 
 		return offset;
 	}
 
-	protected abstract void parseChar(char chr) throws IOException;
+	protected abstract void parseChar(char chr);
 
 	protected final void reinitializeParser() {
 		transition(new RouterParserState(parser));
 	}
 
-	protected final void sendError() throws IOException {
+	protected final void sendError() {
 		parser.sendResponse("\r\nERROR\r\n");
 		reinitializeParser();
 	}
 
-	protected final void sendOk() throws IOException {
+	protected final void sendOk() {
 		parser.sendResponse("\r\nOK\r\n");
 		reinitializeParser();
 	}

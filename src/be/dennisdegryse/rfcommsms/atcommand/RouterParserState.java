@@ -1,7 +1,5 @@
 package be.dennisdegryse.rfcommsms.atcommand;
 
-import java.io.IOException;
-
 /**
  * 
  * @author	Dennis Degryse <dennisdegryse@gmail.com>
@@ -43,7 +41,7 @@ public class RouterParserState extends ParserState {
 		transitionError();
 	}
 
-	private void validateProcedure(boolean executeNow) throws IOException {
+	private void validateProcedure(boolean executeNow) {
 		final String commandName = this.commandNameBuilder.toString();
 		ProcedureParserState procedureState = null;
 		
@@ -67,7 +65,7 @@ public class RouterParserState extends ParserState {
 	}
 
 	@Override
-	public final void parseChar(char chr) throws IOException {
+	public final void parseChar(char chr) {
 		switch (chr) {
 		case LINE_FEED:
 			break;

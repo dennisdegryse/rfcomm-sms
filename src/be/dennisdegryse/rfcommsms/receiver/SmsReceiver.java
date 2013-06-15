@@ -4,12 +4,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+
 import be.dennisdegryse.rfcommsms.client.Connection;
 import be.dennisdegryse.rfcommsms.client.ConnectionManager;
 import be.dennisdegryse.rfcommsms.sms.Sms;
 import be.dennisdegryse.rfcommsms.sms.SmsHelper;
-
-import java.io.IOException;
 
 /**
  * 
@@ -20,11 +19,7 @@ public class SmsReceiver extends BroadcastReceiver {
 		final String response = "+CMT: \"" + sms.getAddress() + "\",,\"" + sms.serviceCenterTimeStamp() + "\"\r\n" + sms.getBody() + "\r\n";
 
 		for (Connection connection : ConnectionManager.getInstance().connections())
-			try {
-				connection.write(response);
-			} catch (IOException e) {
-				// IGNORE
-			}
+			connection.write(response);
 	}
 
 	@Override

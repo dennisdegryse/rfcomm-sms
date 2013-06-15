@@ -1,7 +1,5 @@
 package be.dennisdegryse.rfcommsms.atcommand;
 
-import java.io.IOException;
-
 /**
  * 
  * @author	Dennis Degryse <dennisdegryse@gmail.com>
@@ -12,7 +10,7 @@ public class ATCommandParserState extends CommandParserState {
 	}
 
 	@Override
-	protected final void execute() throws IOException {
+	protected final void execute() {
 		sendOk();
 	}
 }

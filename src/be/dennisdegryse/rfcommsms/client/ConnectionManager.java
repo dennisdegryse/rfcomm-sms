@@ -2,6 +2,7 @@ package be.dennisdegryse.rfcommsms.client;
 
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -44,6 +45,13 @@ public class ConnectionManager {
 		synchronized (lock) {
 			this.clientConnectionThreads.put(connection, connectionThread);
 			connectionThread.start();
+		}
+	}
+	
+	public final void closeAll() {
+		synchronized (lock) {
+			for (Connection connection : clientConnectionThreads.keySet())
+				connection.close();
 		}
 	}
 }

@@ -1,7 +1,5 @@
 package be.dennisdegryse.rfcommsms.atcommand;
 
-import java.io.IOException;
-
 /**
  * 
  * @author	Dennis Degryse <dennisdegryse@gmail.com>
@@ -21,13 +19,13 @@ public class NumericArgumentParserState extends ParserState {
 		return paramChar >= 0x30 && paramChar <= 0x39;
 	}
 
-	private void returnNumericArgument(boolean paramBoolean) throws IOException {
+	private void returnNumericArgument(boolean paramBoolean) {
 		transition(this.commandState);
 		commandState.receiveNumericArgument(argument, paramBoolean);
 	}
 
 	@Override
-	protected final void parseChar(char chr) throws IOException {
+	protected final void parseChar(char chr) {
 		switch (chr) {
 		case COLON:
 			returnNumericArgument(false);
