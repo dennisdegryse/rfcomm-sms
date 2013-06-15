@@ -50,7 +50,7 @@ Also, to receive notifications, the following unsolicited responses are availabl
 Issues
 ------
 
-Apart from being incomplete, this project suffers from the usage of non-standardized material. For instance, the database URI from which to query messages from the phone's storage is not the same on all devices. At the moment there is no generic method to replace this, so it is something to deal with until the Android API defines fixed rules for it. In the mean time, I hope to receive feedback from users with different devices. By confirming that all functionality is working on a specific phone, I can maintain a list of supported devices. Also, by reporting bugs on unsupported phones, they can be investigated and lead to better support in the future.
+Apart from being incomplete, this project suffers from the usage of non-standardized material. For instance, the database URI from which to query messages from the phone's storage is not the same on all devices. At the moment there is no generic method to replace this, so it is something to deal with until the Android API defines fixed rules for it. In the mean time, I hope to receive feedback from users with different devices. By confirming that all functionality is working on a specific phone, I can maintain a list of supported devices. Also, by reporting bugs on unsupported phones, they can be investigated and lead to better support in the future. To view the list of supported devices, visit the [Wiki](https://github.com/dennisdegryse/rfcomm-sms/wiki/Supported-Devices)
 
 There is currently no switch for disabling the service, so when you enable your Bluetooth adapter, the service will automatically be enabled with it.
 
