@@ -24,14 +24,21 @@ public class SmsReceiver extends BroadcastReceiver {
 
 	@Override
 	public final void onReceive(Context context, Intent intent) {
-		final Bundle bundle = intent.getExtras();
-		final SmsHelper smsHelper = new SmsHelper(context);
-
-		if (bundle != null) {
-			final Object[] pduStrings = (Object[]) bundle.get("pdus");
-
-			for (final Object pduString : pduStrings)
-				sendAsUnsolicitedResponse(smsHelper.parseFromPdu((byte[]) pduString));
+		try {
+			final Bundle bundle = intent.getExtras();
+			final SmsHelper smsHelper = new SmsHelper(context);
+	
+			if (bundle != null) {
+				final Object[] pduStrings = (Object[]) bundle.get("pdus");
+	
+				for (final Object pduString : pduStrings) {
+					final Sms sms = smsHelper.parseFromPdu((byte[]) pduString);
+					
+					sendAsUnsolicitedResponse(sms);
+				}
+			}
+		} catch (Exception e) {
+			// IGNORE
 		}
 	}
 }

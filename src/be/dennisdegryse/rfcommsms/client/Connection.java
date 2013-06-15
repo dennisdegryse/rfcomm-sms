@@ -15,7 +15,6 @@ import java.io.UnsupportedEncodingException;
 public class Connection implements Runnable {
 	private final BluetoothSocket clientSocket;
 	private final Context context;
-	private volatile Object lock = new Object();
 	private final Observer observer;
 	private final Parser parser;
 	private volatile boolean stopRequested = false;
@@ -28,21 +27,20 @@ public class Connection implements Runnable {
 	}
 
 	private int read(byte[] buffer, int timeout) {
+		final int maxTimeout = timeout / 50;
+		int elapsedTimeout = 0;
+
 		try {
 			final InputStream inputStream = clientSocket.getInputStream();
-			final int maxTimeout = timeout / 50;
-			int elapsedTimeout = 0;
-	
+			
 			while (inputStream.available() == 0 && elapsedTimeout++ < maxTimeout)
-				try {
+				try {				
 					Thread.sleep(50);
 				} catch (InterruptedException e) {
 					// IGNORE
 				}
 			
-			synchronized (this.lock) {
-				return inputStream.read(buffer);
-			}
+			return inputStream.read(buffer);
 		} catch (IOException e) {
 			close();
 		}
@@ -60,7 +58,7 @@ public class Connection implements Runnable {
 
 		observer.onClosed(this);
 	}
-
+	
 	public final void close() {
 		stopRequested = true;
 	}
@@ -69,6 +67,7 @@ public class Connection implements Runnable {
 		return context;
 	}
 
+	@Override
 	public final void run() {
 		final byte[] buffer = new byte[512];
 
@@ -76,9 +75,7 @@ public class Connection implements Runnable {
 			int size = read(buffer, 500);
 			
 			if (size > 0)
-				synchronized (lock) {
-					this.parser.parse(buffer, size);
-				}
+				parser.parse(buffer, size);
 		}
 
 		terminate();
@@ -94,9 +91,7 @@ public class Connection implements Runnable {
 
 	public final void write(byte[] paramArrayOfByte) {
 		try {
-			synchronized (this.lock) {
-				clientSocket.getOutputStream().write(paramArrayOfByte);
-			}
+			clientSocket.getOutputStream().write(paramArrayOfByte);
 		} catch (IOException e) {
 			close();
 		}
