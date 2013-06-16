@@ -14,12 +14,12 @@ import be.dennisdegryse.rfcommsms.sms.SmsHelper;
  * @author	Dennis Degryse <dennisdegryse@gmail.com>
  */
 public class SmsReceiver extends BroadcastReceiver {
-	private void sendAsUnsolicitedResponse(Sms sms) {
+	private void sendAsUnsolicitedResponse(Context context, Sms sms) {
 		final String response = "+CMT: \"" + sms.getAddress() + "\",,\"" + sms.serviceCenterTimeStamp() + "\"\r\n" + sms.getBody() + "\r\n";
-		final ConnectionManager connectionManager = ConnectionManager.getInstance();
+		final ConnectionManager connectionManager = ConnectionManager.getInstance(context);
 		
 		if (connectionManager.isConnected())
-			connectionManager.getConnection().write(response);
+			connectionManager.getClientConnection().write(response);
 	}
 
 	@Override
@@ -34,7 +34,7 @@ public class SmsReceiver extends BroadcastReceiver {
 				for (final Object pduString : pduStrings) {
 					final Sms sms = smsHelper.parseFromPdu((byte[]) pduString);
 					
-					sendAsUnsolicitedResponse(sms);
+					sendAsUnsolicitedResponse(context, sms);
 				}
 			}
 		} catch (Exception e) {

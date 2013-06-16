@@ -14,17 +14,17 @@ public class BluetoothReceiver extends BroadcastReceiver {
 	@Override
 	public final void onReceive(Context context, Intent intent) {
 		final int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.ERROR);
-		final ConnectionManager connectionManager = ConnectionManager.getInstance();
+		final ConnectionManager connectionManager = ConnectionManager.getInstance(context);
 
 		switch (state) {
 		case BluetoothAdapter.STATE_ON:
-			connectionManager.waitForConnection(context);
+			connectionManager.waitForClientConnection(context);
 			break;
 
 		case BluetoothAdapter.STATE_TURNING_OFF:
 			
 			if (connectionManager.isConnected())
-				connectionManager.getConnection().close();
+				connectionManager.getClientConnection().close();
 			
 			break;
 		}
